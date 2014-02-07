@@ -12,5 +12,12 @@
     <string name="fsquat">Front Squat</string>
     <string name="bsquat">Back Squat</string>
     <string name="calve">Calves</string>
+    <string name="ohpress">Overhead Press</string>
+    <string name="bpress">Bench Press</string>
+    <string name="incdmbpress">Incline Dumbell Press</string>
+    <string name="krows">Kroc Rows</string>
+    <string name="legraises">Leg Raises</string>
+    <string name="fivebyten">5x10</string>
+    <string name="fivebyfift">5x15</string>
 
 </resources>

@@ -14,21 +14,19 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int index) {
 		switch (index) {
         case 0:
-            //return ;
+            return new WeekFrag(1,145,345,235,295);
         case 1:
-            //return ;
+            return new WeekFrag(2,145,345,235,295);
         case 2:
-            //return ;
+            return new WeekFrag(3,145,345,235,295);
         case 3:
-        	//return ;
+        	return new WeekFrag(4,145,345,235,295);
         }
- 
         return null;
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return 4;
 	}
 
