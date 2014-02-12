@@ -17,7 +17,7 @@ public class Settings extends Activity {
 		setContentView(R.layout.activity_settings);
 		Intent info = getIntent();
 		setCurrentMaxViews(info.getIntExtra("OH", 0),
-				info.getIntExtra("DL", 1), info.getIntExtra("BP", 0),
+				info.getIntExtra("DL", 0), info.getIntExtra("BP", 0),
 				info.getIntExtra("SQ", 0));
 		addListenerOnSaveButton();
 		addListenerOnCancelButton();

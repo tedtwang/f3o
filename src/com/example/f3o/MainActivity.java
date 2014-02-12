@@ -38,9 +38,11 @@ public class MainActivity extends FragmentActivity implements
 		actionBar = getActionBar();
 		dbH = new dbHelper(this);
 		if (dbH.checkSize()) {// if db is empty then go in here
-			if (overhead != 0 && deadlift != 0 && bench != 0 && squat != 0) {// if
+			if (overhead != 0 && deadlift != 0 && bench != 0 && squat != 0) {// first
+																				// time
 																				// user
-																				// is
+																				// used
+																				// app,
 																				// coming
 																				// from
 																				// settings
@@ -48,6 +50,7 @@ public class MainActivity extends FragmentActivity implements
 				mAdapter = new TabPagerAdapter(getSupportFragmentManager(),
 						overhead, deadlift, bench, squat);
 				dbH.addMaxes(overhead, deadlift, bench, squat);
+				currentMaxes = dbH.getMaxes();// set the current maxes list
 			} else {// if user first opened the app
 				Toast enterWeights = Toast.makeText(this, "Need to Enter 1RMs",
 						Toast.LENGTH_SHORT);
@@ -113,9 +116,9 @@ public class MainActivity extends FragmentActivity implements
 		case R.id.action_settings:
 			Intent i = new Intent(this, Settings.class);
 			i.putExtra("OH", currentMaxes.get(0));
-        	i.putExtra("DL", currentMaxes.get(1));
-        	i.putExtra("BP", currentMaxes.get(2));
-        	i.putExtra("SQ", currentMaxes.get(3));
+			i.putExtra("DL", currentMaxes.get(1));
+			i.putExtra("BP", currentMaxes.get(2));
+			i.putExtra("SQ", currentMaxes.get(3));
 			startActivity(i);
 			finish();
 			return true;
