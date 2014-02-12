@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class WeekFrag extends Fragment {
 	private int mainXReps[] = {0,0,0};
@@ -63,7 +64,11 @@ public class WeekFrag extends Fragment {
 		
 		new calculateWeight().execute();
 		return rootView;
-		
+	}
+	
+	public void updateMaxes(int oh, int dl, int bp, int sq) {
+		OHRM = oh; DLRM = dl; BPRM = bp; SQRM = sq;
+		new calculateWeight().execute();
 	}
 	
 	private class calculateWeight extends AsyncTask<String, String, String[]> {

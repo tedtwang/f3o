@@ -221,7 +221,7 @@
             android:layout_gravity="center"
             android:paddingTop="2dp"
             android:textColor="#FFFFFF"
-            android:text="@string/fivebyfift" />
+            android:text="@string/fivebyten" />
 
         <TextView
             android:id="@+id/main3XsetOne"

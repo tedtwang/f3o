@@ -26,6 +26,10 @@
             android:name="com.example.f3o.WeekFrag"
             android:label="@string/title_activity_week_frag" >
         </activity>
+        <activity
+            android:name="com.example.f3o.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

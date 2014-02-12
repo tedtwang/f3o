@@ -19,5 +19,9 @@
     <string name="legraises">Leg Raises</string>
     <string name="fivebyten">5x10</string>
     <string name="fivebyfift">5x15</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="save">Save</string>
+    <string name="add">+5/+10</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
