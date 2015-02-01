@@ -10,15 +10,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class Settings extends Activity {
+	private int OHRM = 0, DLRM = 0, BPRM = 0, SQRM = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		Intent info = getIntent();
-		setCurrentMaxViews(info.getIntExtra("OH", 0),
-				info.getIntExtra("DL", 0), info.getIntExtra("BP", 0),
-				info.getIntExtra("SQ", 0));
+		OHRM = info.getIntExtra("OH", 0);
+		DLRM = info.getIntExtra("DL", 0);
+		BPRM = info.getIntExtra("BP", 0);
+		SQRM = info.getIntExtra("SQ", 0);
+		setCurrentMaxViews(OHRM,DLRM,BPRM,SQRM);
 		addListenerOnSaveButton();
 		addListenerOnCancelButton();
 	}
@@ -42,18 +45,31 @@ public class Settings extends Activity {
 	    	saveButton.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
-	            	//grab edit text info, do checking for if one isnt filled out
-	            	String newOh = ((EditText) findViewById(R.id.newOhMax)).getText().toString();
-	            	String newDl = ((EditText) findViewById(R.id.newDlMax)).getText().toString();
-	            	String newBp = ((EditText) findViewById(R.id.newBpMax)).getText().toString();
-	            	String newSq = ((EditText) findViewById(R.id.newSqMax)).getText().toString();
+	            	String newOH,newDL,newBP,newSQ;
+	            	//grab edit text info, if one isn't filled out use old max
+	            	newOH = ((EditText) findViewById(R.id.newOhMax)).getText().toString();
+	            	if (newOH.equals("")) {
+	            		newOH = Integer.toString(OHRM);
+	            	}
+	            	newDL = ((EditText) findViewById(R.id.newDlMax)).getText().toString();
+	            	if (newDL.equals("")) {
+	            		newDL = Integer.toString(DLRM);
+	            	}
+            		newBP = ((EditText) findViewById(R.id.newBpMax)).getText().toString();
+	            	if (newBP.equals("")) {
+	            		newBP = Integer.toString(BPRM);
+	            	}
+            		newSQ = ((EditText) findViewById(R.id.newSqMax)).getText().toString();
+	            	if (newSQ.equals("")) {
+	            		newSQ = Integer.toString(SQRM);
+	            	}
 	            	//check the values
 	            	//dbh.updateMaxes(Integer.valueOf(newOh),Integer.valueOf(newDl),Integer.valueOf(newBp),Integer.valueOf(newSq));
 	            	Intent i = new Intent(getBaseContext(), MainActivity.class);
-	            	i.putExtra("OH", Integer.valueOf(newOh));
-	            	i.putExtra("DL", Integer.valueOf(newDl));
-	            	i.putExtra("BP", Integer.valueOf(newBp));
-	            	i.putExtra("SQ", Integer.valueOf(newSq));
+	            	i.putExtra("OH", Integer.valueOf(newOH));
+	            	i.putExtra("DL", Integer.valueOf(newDL));
+	            	i.putExtra("BP", Integer.valueOf(newBP));
+	            	i.putExtra("SQ", Integer.valueOf(newSQ));
 	            	startActivity(i);
 	            	finish();
 	            }

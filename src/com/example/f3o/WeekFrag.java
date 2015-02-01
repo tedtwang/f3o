@@ -1,15 +1,14 @@
 package com.example.f3o;
 
+import java.util.List;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class WeekFrag extends Fragment {
 	private int mainXReps[] = {0,0,0};
@@ -17,8 +16,23 @@ public class WeekFrag extends Fragment {
 	private String percentages[] = {"%","%","%"}; 
 	private int OHRM = 0, DLRM = 0, BPRM = 0, SQRM = 0;
 	private View rootView;
+	
+	public WeekFrag() {
+		super();
+		List<Integer> currentMaxes = dbHelper.getMaxes();
+		OHRM = currentMaxes.get(0);
+		DLRM = currentMaxes.get(1);
+		BPRM = currentMaxes.get(2);
+		SQRM = currentMaxes.get(3);
+	}
+	
 	public WeekFrag(int id, int OH, int DL, int BP, int SQ) {
+		super();
 		OHRM = OH; DLRM = DL; BPRM = BP; SQRM = SQ;
+		setAndCalcPercentages(id);
+	}
+	
+	void setAndCalcPercentages(int id) {
 		switch (id) {
 		case 1:
 			calcPercentages[0]= (float)0.65; calcPercentages[1]= (float)0.75; calcPercentages[2]= (float)0.85;
@@ -60,8 +74,7 @@ public class WeekFrag extends Fragment {
 		((TextView) rootView.findViewById(R.id.percent1Three)).setText(percentages[2]);
 		((TextView) rootView.findViewById(R.id.percent2Three)).setText(percentages[2]);
 		((TextView) rootView.findViewById(R.id.percent3Three)).setText(percentages[2]);
-		
-		
+
 		new calculateWeight().execute();
 		return rootView;
 	}
@@ -77,29 +90,28 @@ public class WeekFrag extends Fragment {
 		protected String[] doInBackground(String... params) {
 			String[] weightReps = {"","","","","","","","","","","",""};
 			int i = 0;
-			for (i = 0; i<3; i++) {
-				float temp = calcPercentages[i]*OHRM;
-				int weight = 5*(Math.round(temp/5));
-				String weightRep = String.valueOf(weight) + "x" + mainXReps[i];
-				weightReps[i] = weightRep;
-			}
-			for (i = 3; i<6; i++) {
-				float temp = calcPercentages[i-3]*DLRM;
-				int weight = 5*(Math.round(temp/5));
-				String weightRep = String.valueOf(weight) + "x" + mainXReps[i-3];
-				weightReps[i] = weightRep;
-			}
-			for (i = 6; i<9; i++) {
-				float temp = calcPercentages[i-6]*BPRM;
-				int weight = 5*(Math.round(temp/5));
-				String weightRep = String.valueOf(weight) + "x" + mainXReps[i-6];
-				weightReps[i] = weightRep;
-			}
-			for (i = 9; i<12; i++) {
-				float temp = calcPercentages[i-9]*SQRM;
-				int weight = 5*(Math.round(temp/5));
-				String weightRep = String.valueOf(weight) + "x" + mainXReps[i-9];
-				weightReps[i] = weightRep;
+			for (i = 0; i<12; i++) {
+				if (i < 3) {
+					float temp = calcPercentages[i]*OHRM;
+					int weight = 5*(Math.round(temp/5));
+					String weightRep = String.valueOf(weight) + "x" + mainXReps[i];
+					weightReps[i] = weightRep;
+				} else if (i < 6) {
+					float temp = calcPercentages[i-3]*DLRM;
+					int weight = 5*(Math.round(temp/5));
+					String weightRep = String.valueOf(weight) + "x" + mainXReps[i-3];
+					weightReps[i] = weightRep;
+				} else if (i < 9) {
+					float temp = calcPercentages[i-6]*BPRM;
+					int weight = 5*(Math.round(temp/5));
+					String weightRep = String.valueOf(weight) + "x" + mainXReps[i-6];
+					weightReps[i] = weightRep;
+				} else if (i < 12) {
+					float temp = calcPercentages[i-9]*SQRM;
+					int weight = 5*(Math.round(temp/5));
+					String weightRep = String.valueOf(weight) + "x" + mainXReps[i-9];
+					weightReps[i] = weightRep;
+				}
 			}
 			
 			return weightReps;

@@ -20,7 +20,7 @@ public class dbHelper extends SQLiteOpenHelper {
 								sq_col = "squat";
 	private final static int DATABASE_VERSION = 1;
 	private String CREATE_DATABASE;
-	private SQLiteDatabase db;
+	private static SQLiteDatabase db;
 	
 	public dbHelper(Context context) {
 		super(context, DATABASE_NAME, null,DATABASE_VERSION);
@@ -46,7 +46,7 @@ public class dbHelper extends SQLiteOpenHelper {
 		//eh
 	}
 	
-	public List<Integer> getMaxes() {
+	public static List<Integer> getMaxes() {
 		List<Integer> maxes = new ArrayList<Integer>();
 		String selectQuery = "SELECT  * FROM " + TABLE_NAME;
 		 

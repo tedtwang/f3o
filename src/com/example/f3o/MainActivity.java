@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,34 +24,40 @@ public class MainActivity extends FragmentActivity implements
 	private List<Integer> currentMaxes;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	protected void onStart() {
+		super.onStart();
+		Log.i("Ted","Starting F3O main...");
 		setContentView(R.layout.activity_main);
-		// try {
-		Intent i = getIntent();
-		int overhead = i.getIntExtra("OH", 0);
-		int deadlift = i.getIntExtra("DL", 0);
-		int bench = i.getIntExtra("BP", 0);
-		int squat = i.getIntExtra("SQ", 0);
-		// }
-
+		
+		//initialize variables
+		int 	overhead = 0,
+				deadlift = 0,
+				bench = 0,
+				squat = 0;
 		vPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
 		dbH = new dbHelper(this);
-		if (dbH.checkSize()) {// if db is empty then go in here
-			if (overhead != 0 && deadlift != 0 && bench != 0 && squat != 0) {// first
-																				// time
-																				// user
-																				// used
-																				// app,
-																				// coming
-																				// from
-																				// settings
-																				// activity
-				mAdapter = new TabPagerAdapter(getSupportFragmentManager(),
-						overhead, deadlift, bench, squat);
+		
+		//if coming from settings page
+		Intent i = getIntent();
+		if (i != null) {
+			overhead = i.getIntExtra("OH", 0);
+			deadlift = i.getIntExtra("DL", 0);
+			bench = i.getIntExtra("BP", 0);
+			squat = i.getIntExtra("SQ", 0);
+			if (overhead != 0 && deadlift != 0 && bench != 0 && squat != 0) {// if
+				// user updated maxes from settings
+				dbH.updateMaxes(overhead, deadlift, bench, squat);
+			}
+		}
+
+		//if reopening app: new instance or saved instance
+		if (dbH.checkSize()) {// if db is empty then go in here (first instance)
+			if (overhead != 0 && deadlift != 0 && bench != 0 && squat != 0) {
+				// first time user used app, coming from settings
+				mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 				dbH.addMaxes(overhead, deadlift, bench, squat);
-				currentMaxes = dbH.getMaxes();// set the current maxes list
+				currentMaxes = dbHelper.getMaxes();// set the current maxes list
 			} else {// if user first opened the app
 				Toast enterWeights = Toast.makeText(this, "Need to Enter 1RMs",
 						Toast.LENGTH_SHORT);
@@ -59,34 +66,24 @@ public class MainActivity extends FragmentActivity implements
 				startActivity(j);
 				finish();
 			}
-		} else {
-			if (overhead != 0 && deadlift != 0 && bench != 0 && squat != 0) {// if
-																				// user
-																				// reopened
-																				// app
-																				// but
-																				// already
-																				// updated
-																				// maxes
-				dbH.updateMaxes(overhead, deadlift, bench, squat);
-			}
-			currentMaxes = dbH.getMaxes();
-			mAdapter = new TabPagerAdapter(getSupportFragmentManager(),
-					currentMaxes.get(0), currentMaxes.get(1),
-					currentMaxes.get(2), currentMaxes.get(3));
+		} else { //previous instance
+			currentMaxes = dbHelper.getMaxes();
+			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 		}
+		onCreateHelper();
+	}
 
+	void onCreateHelper() {
 		vPager.setAdapter(mAdapter);
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
+		
 		for (String tab_name : tabs) {
 			actionBar.addTab(actionBar.newTab().setText(tab_name)
 					.setTabListener(this));
 		}
 
 		vPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
 			@Override
 			public void onPageSelected(int position) {
 				actionBar.setSelectedNavigationItem(position);
@@ -101,7 +98,11 @@ public class MainActivity extends FragmentActivity implements
 			}
 		});
 	}
-
+	@Override
+	public void onResumeFragments() {
+		super.onResumeFragments();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -126,7 +127,7 @@ public class MainActivity extends FragmentActivity implements
 			return super.onOptionsItemSelected(item);
 		}
 	}
-
+	
 	public void updateWorkout(int oh, int dl, int bp, int sq) {
 		mAdapter.updateMaxes(oh, dl, bp, sq);
 	}
